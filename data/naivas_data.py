@@ -7,7 +7,9 @@ import boto3
 branches = [
     "Naivas Nairobi CBD", "Naivas Westlands", "Naivas Thika Road", "Naivas Kisumu",
     "Naivas Eldoret", "Naivas Nakuru", "Naivas Mombasa", "Naivas Machakos",
-    "Naivas Kitale", "Naivas Nyeri"
+    "Naivas Kitale", "Naivas Nyeri", "Naivas Nairobi CBD", "naivas nairobi cbd", "nairobi cbd", "CBD", "  naivas cbd ",
+    "nairob cbd", "NAIVAS NAIROBI CENTRAL", "naivas kisumu", "kisumu", "Naivas Kisum", "KSM",  
+    "naivas-kisumu",
 ]
 
 # Categories with foodstuff dominating
@@ -43,23 +45,26 @@ full_df = pd.DataFrame(data, columns=[
     "date", "branch", "product_id", "product_name", "quantity", "unit_price", "total_amount", "customer_id"
 ])
 
-# Upload to S3 with partitioned structure
-current_date = datetime.now()
-year = current_date.year
-month = f"{current_date.month:02d}"
+full_df.to_csv("raw_data.csv", index=False)
+print(f"Transformed data saved to raw_data.csv")
 
-s3_key = f"raw/year={year}/month={month}/naivas_sales_{current_date.strftime('%B').lower()}.csv"
-bucket_name = "naivas-raw-data-bbantu-2025"
+# # Upload to S3 with partitioned structure
+# current_date = datetime.now()
+# year = current_date.year
+# month = f"{current_date.month:02d}"
 
-# Convert to CSV in memory
-csv_buffer = full_df.to_csv(index=False)
+# s3_key = f"raw/year={year}/month={month}/naivas_sales_{current_date.strftime('%B').lower()}.csv"
+# bucket_name = "naivas-raw-data-bbantu-2025"
 
-# Upload to S3
-s3_client = boto3.client('s3')
-s3_client.put_object(
-    Bucket=bucket_name,
-    Key=s3_key,
-    Body=csv_buffer
-)
+# # Convert to CSV in memory
+# csv_buffer = full_df.to_csv(index=False)
 
-print(f"✅ Dataset uploaded to s3://{bucket_name}/{s3_key} with 30,000 rows")
+# # Upload to S3
+# s3_client = boto3.client('s3')
+# s3_client.put_object(
+#     Bucket=bucket_name,
+#     Key=s3_key,
+#     Body=csv_buffer
+# )
+
+# print(f"✅ Dataset uploaded to s3://{bucket_name}/{s3_key} with 30,000 rows")
