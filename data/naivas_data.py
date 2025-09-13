@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 from datetime import datetime, timedelta
+import boto3
 
 # Branches of Naivas
 branches = [
@@ -42,6 +43,23 @@ full_df = pd.DataFrame(data, columns=[
     "date", "branch", "product_id", "product_name", "quantity", "unit_price", "total_amount", "customer_id"
 ])
 
-# Save full dataset
-full_df.to_csv("naivas_full.csv", index=False)
-print("✅ Full dataset saved as naivas_full.csv with 30,000 rows")
+# Upload to S3 with partitioned structure
+current_date = datetime.now()
+year = current_date.year
+month = f"{current_date.month:02d}"
+
+s3_key = f"raw/year={year}/month={month}/naivas_sales_{current_date.strftime('%B').lower()}.csv"
+bucket_name = "naivas-raw-data-bbantu-2025"
+
+# Convert to CSV in memory
+csv_buffer = full_df.to_csv(index=False)
+
+# Upload to S3
+s3_client = boto3.client('s3')
+s3_client.put_object(
+    Bucket=bucket_name,
+    Key=s3_key,
+    Body=csv_buffer
+)
+
+print(f"✅ Dataset uploaded to s3://{bucket_name}/{s3_key} with 30,000 rows")
