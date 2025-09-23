@@ -45,8 +45,8 @@ full_df = pd.DataFrame(data, columns=[
     "date", "branch", "product_id", "product_name", "quantity", "unit_price", "total_amount", "customer_id"
 ])
 
-# Replace ANON customer IDs with Guest
-full_df['customer_id'] = full_df['customer_id'].replace('ANON', 'Guest')
+# # Replace ANON customer IDs with Guest
+# full_df['customer_id'] = full_df['customer_id'].replace('ANON', 'Guest')
 
 full_df.to_csv("raw_data.csv", index=False)
 print(f"Transformed data saved to raw_data.csv")
