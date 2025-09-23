@@ -1,9 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pandas as pd
-
-def standardize_dates(df):
-    """Standardize date column to YYYY-MM-DD format"""
-    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
-    return df
+from helper_functions.standard_date import standardize_dates
+from helper_functions.branches import branch_normalize
 
 def transform_naivas_data(input_file, output_file):
     """Transform Naivas data with standardized dates"""
@@ -12,6 +12,10 @@ def transform_naivas_data(input_file, output_file):
     
     # Standardize dates
     df = standardize_dates(df)
+    print(df.head())  # Check after date standardization
+    # Normalize branch names
+    df = branch_normalize(df)
+    print(df.head())  # Check after branch normalization
     
     # Save transformed data
     df.to_csv(output_file, index=False)
@@ -20,4 +24,4 @@ def transform_naivas_data(input_file, output_file):
     return df
 
 if __name__ == "__main__":
-    transform_naivas_data("../data/naivas_full.csv", "../data/naivas_transformed.csv")
+    transform_naivas_data("../data/raw_data.csv", "../data/naivas_transformed.csv")
