@@ -1,2 +1,6 @@
 /venv
 GITHUBSETUP.md
+*.csv
+AWS_SETUP.md
+*.zip
+/aws
