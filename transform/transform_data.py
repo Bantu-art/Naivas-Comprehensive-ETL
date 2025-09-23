@@ -5,6 +5,11 @@ import pandas as pd
 from helper_functions.standard_date import standardize_dates
 from helper_functions.branches import branch_normalize
 
+def normalize_customer_ids(df):
+    """Normalize customer IDs - convert ANON to Guest"""
+    df['customer_id'] = df['customer_id'].replace('ANON', 'Guest')
+    return df
+
 def transform_naivas_data(input_file, output_file):
     """Transform Naivas data with standardized dates"""
     # Read data
@@ -16,6 +21,8 @@ def transform_naivas_data(input_file, output_file):
     # Normalize branch names
     df = branch_normalize(df)
     print(df.head())  # Check after branch normalization
+    # Normalize customer IDs
+    df = normalize_customer_ids(df)
     
     # Save transformed data
     df.to_csv(output_file, index=False)
